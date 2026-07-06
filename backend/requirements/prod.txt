@@ -1,0 +1,4 @@
+# CrisisLens AI — Production-only Dependencies
+# Add production-specific packages here (e.g., monitoring, APM)
+
+gunicorn>=23.0.0,<24.0.0

@@ -1,0 +1,346 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+@import "tailwindcss";
+
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-background: #0B0F17;
+  --color-surface: #151C28;
+  --color-elevated: #1B2433;
+  --color-foreground: #F8FAFC;
+  --color-secondary: #CBD5E1;
+  --color-muted-fg: #94A3B8;
+  --color-primary: #3B82F6;
+  --color-primary-hover: #2563EB;
+  --color-primary-glow: #60A5FA;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-critical: #DC2626;
+  --color-border: rgba(255, 255, 255, 0.06);
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+    background-color: #0B0F17;
+  }
+
+  body {
+    background-color: #0B0F17;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.08) 0px, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 0% 100%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(59, 130, 246, 0.04) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: #F8FAFC;
+    font-family: var(--font-sans);
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+
+  #root {
+    min-height: 100vh;
+    isolation: isolate;
+  }
+
+  /* ─── Premium Custom Scrollbar ─────────────────────────────────── */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(11, 15, 23, 0.5);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 99px;
+    transition: background 0.2s;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(59, 130, 246, 0.3);
+  }
+
+  /* Text selection */
+  ::selection {
+    background: rgba(59, 130, 246, 0.28);
+    color: #ffffff;
+  }
+
+  /* Focus rings */
+  :focus-visible {
+    outline: 2px solid rgba(59, 130, 246, 0.55);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+@layer utilities {
+
+  /* ─── Skeleton Loading ──────────────────────────────────────────── */
+  @keyframes shimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position: 600px 0; }
+  }
+
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(21, 28, 40, 0.8) 25%,
+      rgba(27, 36, 51, 0.9) 50%,
+      rgba(21, 28, 40, 0.8) 75%
+    );
+    background-size: 1200px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    border-radius: 10px;
+  }
+
+  /* ─── Glassmorphism Surfaces ──────────────────────────────────── */
+  .glass {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(21, 28, 40, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.03) inset,
+      0 8px 32px rgba(0, 0, 0, 0.35),
+      0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .glass-dark {
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    background: rgba(11, 15, 23, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.02) inset,
+      0 16px 48px rgba(0, 0, 0, 0.5),
+      0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  .glass-elevated {
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    background: rgba(27, 36, 51, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.05) inset,
+      0 20px 60px rgba(0, 0, 0, 0.4),
+      0 8px 24px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(59, 130, 246, 0.03);
+  }
+
+  /* ─── Card Hover Lift ────────────────────────────────────────── */
+  .card-hover {
+    transition:
+      transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.25s ease,
+      border-color 0.25s ease,
+      background 0.25s ease;
+    will-change: transform;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 24px 64px -8px rgba(0, 0, 0, 0.5),
+      0 8px 24px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(59, 130, 246, 0.08),
+      0 0 40px rgba(59, 130, 246, 0.04);
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  /* ─── Gradient Text ──────────────────────────────────────────── */
+  .gradient-text {
+    background: linear-gradient(135deg, #60A5FA 0%, #818cf8 45%, #c084fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-white {
+    background: linear-gradient(135deg, #ffffff 0%, #CBD5E1 60%, #94A3B8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ─── Glow Pulse ─────────────────────────────────────────────── */
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); opacity: 1; }
+    50%       { box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.15); opacity: 0.9; }
+  }
+
+  .glow-pulse {
+    animation: glow-pulse 2.2s ease-in-out infinite;
+  }
+
+  /* ─── Animated Count-up ─────────────────────────────────────── */
+  @keyframes count-up {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-count-up {
+    animation: count-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* ─── Page Transitions ──────────────────────────────────────── */
+  @keyframes page-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .page-enter {
+    animation: page-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* ─── Badge Critical Pulse ──────────────────────────────────── */
+  @keyframes badge-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.75; transform: scale(1.05); }
+  }
+
+  .badge-critical {
+    animation: badge-pulse 1.8s ease-in-out infinite;
+  }
+
+  /* ─── Blue radial glow background ──────────────────────────── */
+  .radial-glow {
+    background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+  }
+
+  /* ─── Drop Zone ─────────────────────────────────────────────── */
+  .drop-active {
+    border-color: rgba(59, 130, 246, 0.6) !important;
+    background: rgba(59, 130, 246, 0.06) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15), inset 0 0 30px rgba(59, 130, 246, 0.04) !important;
+  }
+
+  /* ─── Spin slow ─────────────────────────────────────────────── */
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 4s linear infinite;
+  }
+
+  /* ─── Focus ring for selects ──────────────────────────────── */
+  select:focus {
+    outline: 2px solid rgba(59, 130, 246, 0.45);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  /* ─── Comprehensive Leaflet Dark Mode ────────────────────────── */
+  .leaflet-container {
+    background: #0B0F17 !important;
+    font-family: var(--font-sans) !important;
+  }
+
+  .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip {
+    background: #111827 !important;
+    color: #F8FAFC !important;
+    border: 1px solid rgba(255, 255, 255, 0.07) !important;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8) !important;
+    border-radius: 16px !important;
+    backdrop-filter: blur(20px) !important;
+  }
+  .leaflet-popup-content {
+    margin: 14px 16px !important;
+    color: #F8FAFC !important;
+    line-height: 1.6 !important;
+  }
+  .leaflet-container a.leaflet-popup-close-button {
+    color: #64748b !important;
+    font-size: 18px !important;
+    padding: 5px 8px !important;
+    border-radius: 8px !important;
+  }
+  .leaflet-container a.leaflet-popup-close-button:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #94a3b8 !important;
+  }
+
+  .leaflet-control-zoom {
+    border: 1px solid rgba(255, 255, 255, 0.07) !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    backdrop-filter: blur(16px) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6) !important;
+  }
+  .leaflet-control-zoom a {
+    background: rgba(17, 24, 39, 0.92) !important;
+    color: #94a3b8 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    width: 34px !important;
+    height: 34px !important;
+    line-height: 34px !important;
+  }
+  .leaflet-control-zoom a:hover {
+    background: rgba(27, 36, 51, 0.98) !important;
+    color: #60A5FA !important;
+  }
+
+  .leaflet-control-attribution {
+    background: rgba(11, 15, 23, 0.8) !important;
+    color: #475569 !important;
+    font-size: 9px !important;
+    padding: 3px 8px !important;
+    border-radius: 6px !important;
+    border: none !important;
+    backdrop-filter: blur(8px) !important;
+  }
+  .leaflet-control-attribution a {
+    color: #64748b !important;
+  }
+
+  @keyframes ping {
+    75%, 100% {
+      transform: scale(2.2);
+      opacity: 0;
+    }
+  }
+
+  .leaflet-tile {
+    filter: brightness(0.95) contrast(1.02);
+  }
+}
+
+/* ─── Print Styles ─────────────────────────────────────────────── */
+@media print {
+  header, nav, .no-print, button:not(.print-visible) {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: #0f172a !important;
+    font-size: 12px;
+  }
+  main { padding: 0 !important; }
+  .card-hover { box-shadow: none !important; transform: none !important; }
+  * { animation: none !important; transition: none !important; }
+  .page-break { page-break-after: always; }
+}

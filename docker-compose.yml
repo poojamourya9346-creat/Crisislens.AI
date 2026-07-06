@@ -1,0 +1,68 @@
+# =============================================================================
+# CrisisLens AI — Docker Compose (Local Development)
+# =============================================================================
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: crisislens-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-crisislens}
+      POSTGRES_USER: ${POSTGRES_USER:-crisislens}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-crisislens} -d ${POSTGRES_DB:-crisislens}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - crisislens-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: crisislens-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-crisislens}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-crisislens}
+      APP_ENV: development
+      APP_DEBUG: "true"
+      LOG_FORMAT: console
+    ports:
+      - "${BACKEND_PORT:-8000}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - crisislens-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000/api/v1}
+    container_name: crisislens-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-5173}:8080"
+    depends_on:
+      - backend
+    networks:
+      - crisislens-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  crisislens-network:
+    driver: bridge

@@ -1,0 +1,55 @@
+# CrisisLens AI — Google Cloud Run Service Definitions
+# Deploy with: gcloud run services replace infra/cloud-run/backend-service.yaml
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: crisislens-backend
+  labels:
+    app: crisislens
+    component: backend
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "10"
+        run.googleapis.com/cpu-throttling: "true"
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      serviceAccountName: crisislens-backend-sa
+      containers:
+        - image: REGION-docker.pkg.dev/PROJECT_ID/crisislens/backend:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: APP_ENV
+              value: production
+            - name: APP_DEBUG
+              value: "false"
+            - name: LOG_FORMAT
+              value: json
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: crisislens-database-url
+                  key: latest
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: crisislens-jwt-secret
+                  key: latest
+          resources:
+            limits:
+              cpu: "2"
+              memory: 1Gi
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 10

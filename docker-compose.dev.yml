@@ -1,0 +1,20 @@
+# =============================================================================
+# CrisisLens AI — Docker Compose Override (Hot Reload Development)
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+# =============================================================================
+
+services:
+  backend:
+    build:
+      target: dev
+    volumes:
+      - ./backend/src:/app/src
+
+  frontend:
+    build:
+      target: dev
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    ports:
+      - "${FRONTEND_PORT:-5173}:8080"
