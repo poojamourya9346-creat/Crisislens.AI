@@ -200,18 +200,6 @@ npm run build
 npm run lint
 ```
 
----
-
-## Screenshots
-
-Placeholder screenshots will be added in a future release cycle.
-
-- Screenshot 1: Incident intake workflow
-- Screenshot 2: Incident dashboard
-- Screenshot 3: Analytics view
-
----
-
 ## Production Checklist
 
 - [x] Backend tests are passing
